@@ -8,4 +8,39 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+This project aims to evaluate different control measures for COVID-19, especially responsive lockdown.
+
+## Reading materials
+
+* [2020-06-09] [Suppressing COVID-19 transmission in Hong Kong: an observational study of the first four months](https://www.researchsquare.com/article/rs-34047/v1)
+
+* [2020-06-07] [The impact of COVID-19 control measures on social contacts and transmission in Kenyan informal settlements](https://www.medrxiv.org/content/10.1101/2020.06.06.20122689v1)
+
+* [2020-06-07] [A rapid systematic review and case study on test, contact tracing, testing, and isolation policies for Covid-19 prevention and control](https://www.medrxiv.org/content/10.1101/2020.06.04.20122614v1)
+
+* [2020-06-05] [Cohort-based approach to understanding the roles of generation and serial intervals in shaping epidemiological dynamics](https://github.com/parksw3/serial/blob/master/v1/serial.pdf)
+
+* [2020-06-05] [The effectiveness of social bubbles as part of a Covid-19 lockdown exit strategy, a modelling study](https://cmmid.github.io/topics/covid19/SocialBubbles.html)
+
+* [2020-05-27] [Combining fine-scale social contact data with epidemic modelling reveals interactions between contact tracing, quarantine, testing and physical distancing for controlling COVID-19](https://www.medrxiv.org/content/10.1101/2020.05.26.20	113720v1)
+
+* [2020-05-21] [Clustering and superspreading potential of severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) infections in Hong Kong](https://www.researchsquare.com/article/rs-29548/v1)
+
+* [2020-05-12] [Sparking “The BBC Four Pandemic”: Leveraging citizen science and mobile phones to model the spread of disease](https://www.biorxiv.org/content/10.1101/479154v2)
+
+* [2020-04-29] Effectiveness of isolation, testing, contact tracing and physical distancing on reducing transmission of SARS-CoV-2 in different settings (https://www.medrxiv.org/content/10.1101/2020.04.23.20077024v1)
+
+* [2020-04-16] [Isolation and contact tracing can tip the scale to containment of COVID-19 in populations with social distancing](https://www.medrxiv.org/content/10.1101/2020.03.10.20033738v3)
+
+* [2020-03-25] [The effect of control strategies to reduce social mixing on outcomes of the COVID-19 epidemic in Wuhan, China: a modelling study](https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(20)30073-6/fulltext?utm_campaign=tlcoronavirus20&utm_source=twitter&utm_medium=social)
+
+* [2020-03-05] [Contacts in context: large-scale setting-specific social mixing matrices from the BBC Pandemic project](https://www.medrxiv.org/content/10.1101/2020.02.16.20023754v2)
+
+* [2020-02-27] [Secondary attack rate and superspreading events for SARS-CoV-2](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30462-1/fulltext)
+
+* [2020-02-17] [The Efficacy of Contact Tracing for the Containment of the 2019 Novel Coronavirus (COVID-19)](https://www.medrxiv.org/content/10.1101/2020.02.14.20023036v1)
+
+
+
+
+
