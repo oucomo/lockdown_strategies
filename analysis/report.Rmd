@@ -1,0 +1,157 @@
+---
+title: "Report"
+author: "Lam Phung Khanh"
+date: "7/30/2020 (update: `r Sys.Date()`)"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Objectives
+
+## Methods
+
+### Contact network
+
+* BBC Pandemic data
+* Google Mobility data
+* Facebook data
+* Contact tracing data
+
+### Epidemic model
+
+* a branching process model
+* the number of potential secondary cases produced by each individual is drawn from a negative binomial distribution with a mean equal to the reproduction number, and heterogeneity in the number of new infections produced by each individual
+*  Each potential new infection was assigned a time of infection drawn from the serial interval distribution. 
+*  Secondary cases were only created if the person with the infection had not been isolated by the time of infection
+*  in the model, a reduced delay from onset to isolation would reduce the average number of secondary cases
+
+* We initialised the branching process with five, 20, or 40 cases to represent a newly detected outbreak of varying size. 
+* Initial symptomatic cases were then isolated after symptom onset with a delay drawn from the onset-toisolation distribution (table). 
+* Isolation was assumed to be 100% effective at preventing further transmission; therefore, in the model, failure to control the outbreak resulted from the incomplete contact tracing and the delays in isolating cases rather than the inability of isolation to prevent further transmission. 
+* Either 100% or 90% of cases became symptomatic, and all symptomatic cases were eventually reported.
+
+* Each newly infected case was identified through contact tracing with probability ρ. 
+* Secondary cases that had been traced were isolated immediately on becoming symptomatic. 
+* Cases that were missed by contact tracing (probability 1–ρ) were isolated when they became symptomatic, with a delay drawn from the onset-to -isolation distribution
+
+* In addition, each case had an independent probability of being subclinical, and was therefore not detected either by self-report or contact tracing. 
+* New secondary cases caused by a subclinical case were missed by contact tracing and could only be isolated on the basis of symptoms. 
+* The model included isolation of symptomatic individuals only—ie, no quarantine, so isolation could not prevent transmission before symptom onset. 
+* In the model, subclinical cases were never isolated, whereas symptomatic cases might transmit before symptoms appear, but were eventually isolated. 
+* Quarantining contacts of cases (ie, individuals who are not yet symptomatic, and might not be infected) requires a considerable investment in public health resources, and has not been widely implemented for all contacts of cases
+* However, some countries have adopted a quarantine or self-quarantine policy for airline travellers who have returned from countries with confirmed COVID-19 transmission.
+
+### Lockdown strategies
+
+* Nothing
+* Contact-tracing only
+* Full lockdown
+* Responsive lockdown
+
+### Cost-effectiveness assessment
+
+#### Outcomes
+
+* Number of cases
+* Number of quarantine
+* Number of test
+
+* Cost
+
+## Results
+### Contact network
+```{r}
+# simulate population
+pop <- pop_sim(n = 500, hh_max = 8, hh_mean = 4, ws_max = 100, ws_mean = 50, seed = 1)
+```
+
+Check structure of population
+
+* Household
+
+```{r}
+hh <- pop %>%
+  group_by(hh_id) %>%
+  summarise(n = n(), .groups = "drop")
+ggplot(data = hh) + geom_histogram(aes(x = n), binwidth = 1)
+```
+
+* Work/school
+
+```{r}
+ws <- pop %>%
+  group_by(ws_id) %>%
+  summarise(n = n(), .groups = "drop")
+ggplot(data = ws) + geom_histogram(aes(x = n), binwidth = 1)
+ggplot(data = filter(ws, n > 1)) + geom_histogram(aes(x = n), binwidth = 1)
+```
+```{r}
+## simulate contact
+contactnet <- contact_sim(pop = pop,
+                          assume = cbind(hh = c(0.1, 0.2, 0.4, 0.3),
+                                         ws = c(0.69, 0.2, 0.1, 0.01),
+                                         ot = c(0.889, 0.1, 0.01, 0.001)),
+                          seed = 1)
+```
+
+Describe contact network
+
+```{r}
+sum_contactnet <- contactnet %>%
+  group_by(case_1) %>%
+  summarise(n_0 = sum(value == 0),
+            n_1 = sum(value == 1),
+            n_2 = sum(value == 2),
+            n_3 = sum(value == 3),
+            n_4 = sum(value %in% c(1:3)),
+            .groups = "drop") %>%
+  gather(key = "type", value = "n", -case_1) %>%
+  mutate(p = n/length(unique(contactnet$case_1)))
+```
+
+```{r}
+ggplot(data = sum_contactnet, aes(x = type, y = p)) + geom_boxplot()
+ggplot(data = sum_contactnet, aes(x = type, y = n)) + geom_boxplot() +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 100, 200, 300, 400, 500))
+```
+
+Update contact daily
+
+```{r}
+contact_d1 <- contact_step(contact_setup = contactnet, day = 1, p = 0.99)
+```
+
+
+### Transmission rate and probability of infection
+
+```{r}
+p <- seq(from = 0, to = 1, by = 0.001)
+rate <- -log(1 - p)
+
+plot(x = p, y = rate)
+```
+### Scenarios
+```{r}
+pop <- pop_sim(n = 500, hh_max = 8, hh_mean = 4, ws_max = 100, ws_mean = 50, seed = 1)
+
+## simulate contact
+contactnet <- contact_sim(pop = pop,
+                          assume = cbind(hh = c(0.1, 0.2, 0.4, 0.3),
+                                         ws = c(0.69, 0.2, 0.1, 0.01),
+                                         ot = c(0.889, 0.1, 0.01, 0.001)),
+                          seed = 1)
+```
+
+
+#### No control
+
+```{r}
+
+```
+
+
+## Discussions
