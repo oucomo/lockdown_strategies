@@ -1,6 +1,9 @@
 library(tidyverse)
 library(tidyr)
 
+source("functions.R")
+
+
 ## simulate population
 pop <- pop_sim(n = 500, hh_max = 8, hh_mean = 4, ws_max = 100, ws_mean = 50, seed = 1)
 
@@ -89,3 +92,94 @@ for (i in c(1:nrow(tmp))) {
 ## summary
 outbreak_plot(summary_data = tmp, y = c("Incidence of infection"), x = "Day", period = c(0, 10))
 load(file.path(outdir, "full_lockdown", paste("scenario", 1, sep = "_"), "contact_20200802214700.Rdata"))
+
+### no control
+load(file.path(outdir, "nocontrol", paste0("res_nocontrol_", 1, ".Rdata")))
+load(file.path(outdir, "nocontrol", paste0("res_nocontrol_", 2, ".Rdata")))
+load(file.path(outdir, "nocontrol", paste0("res_nocontrol_", 4, ".Rdata")))
+
+scen1_d <- res_nocontrol_1[[1]] %>%
+  group_by(day) %>%
+  summarise(infection_new_mn = mean(infection_new),
+            infection_new_se = sd(infection_new)/sqrt(length(unique(sim))),
+            infection_new_md  = quantile(infection_new)[[3]],
+            infection_new_ql  = quantile(infection_new)[[2]],
+            infection_new_qh  = quantile(infection_new)[[4]],
+            infection_new_lo  = infection_new_mn - 1.96 * infection_new_se,
+            infection_new_hi  = infection_new_mn + 1.96 * infection_new_se,
+            .groups = "drop")
+
+scen2_d <- res_nocontrol_2[[1]] %>%
+  group_by(day) %>%
+  summarise(infection_new_mn = mean(infection_new),
+            infection_new_se = sd(infection_new)/sqrt(length(unique(sim))),
+            infection_new_md  = quantile(infection_new)[[3]],
+            infection_new_ql  = quantile(infection_new)[[2]],
+            infection_new_qh  = quantile(infection_new)[[4]],
+            infection_new_lo  = infection_new_mn - 1.96 * infection_new_se,
+            infection_new_hi  = infection_new_mn + 1.96 * infection_new_se,
+            .groups = "drop")
+
+scen4_d <- res_nocontrol_4[[1]] %>%
+  group_by(day) %>%
+  summarise(infection_new_mn = mean(infection_new),
+            infection_new_se = sd(infection_new)/sqrt(length(unique(sim))),
+            infection_new_md  = quantile(infection_new)[[3]],
+            infection_new_ql  = quantile(infection_new)[[2]],
+            infection_new_qh  = quantile(infection_new)[[4]],
+            infection_new_lo  = infection_new_mn - 1.96 * infection_new_se,
+            infection_new_hi  = infection_new_mn + 1.96 * infection_new_se,
+            .groups = "drop")
+
+
+ggplot(data = filter(scen1_d, day >= 0, day <= 30), aes(x = day, y = infection_new_mn)) +
+  geom_ribbon(aes(ymin = infection_new_lo, ymax = infection_new_hi), fill ='grey50') +
+  geom_line() +
+  theme_bw() +
+  xlab("Days") + ylab("Incidence")
+
+ggplot(data = filter(scen1_d, day >= 0, day <= 30), aes(x = day, y = infection_new_md)) +
+  geom_ribbon(aes(ymin = infection_new_ql, ymax = infection_new_qh), fill ='grey80') +
+  geom_line() +
+  geom_ribbon(data = filter(scen2_d, day >= 0, day <= 30), aes(ymin = infection_new_ql, ymax = infection_new_qh), fill ='red4', alpha = 0.2) +
+  geom_line(data = filter(scen2_d, day >= 0, day <= 30), color = "red") +
+  geom_ribbon(data = filter(scen4_d, day >= 0, day <= 30), aes(ymin = infection_new_ql, ymax = infection_new_qh), fill ='blue4', alpha = 0.2) +
+  geom_line(data = filter(scen4_d, day >= 0, day <= 30), color = "blue") +
+  theme_bw() +
+  xlab("Days") + ylab("Incidence")
+
+### full lockdown
+load(file.path(outdir, "full_lockdown", paste0("res_full_lockdown_", 1, ".Rdata")))
+load(file.path(outdir, "full_lockdown", paste0("res_full_lockdown_", 2, ".Rdata")))
+
+scenfl1_d <- res_full_lockdown_1[[1]] %>%
+  group_by(day) %>%
+  summarise(infection_new_mn = mean(infection_new),
+            infection_new_se = sd(infection_new)/sqrt(length(unique(sim))),
+            infection_new_md  = quantile(infection_new)[[3]],
+            infection_new_ql  = quantile(infection_new)[[2]],
+            infection_new_qh  = quantile(infection_new)[[4]],
+            infection_new_lo  = infection_new_mn - 1.96 * infection_new_se,
+            infection_new_hi  = infection_new_mn + 1.96 * infection_new_se,
+            .groups = "drop")
+
+scenfl2_d <- res_full_lockdown_2[[1]] %>%
+  group_by(day) %>%
+  summarise(infection_new_mn = mean(infection_new),
+            infection_new_se = sd(infection_new)/sqrt(length(unique(sim))),
+            infection_new_md  = quantile(infection_new)[[3]],
+            infection_new_ql  = quantile(infection_new)[[2]],
+            infection_new_qh  = quantile(infection_new)[[4]],
+            infection_new_lo  = infection_new_mn - 1.96 * infection_new_se,
+            infection_new_hi  = infection_new_mn + 1.96 * infection_new_se,
+            .groups = "drop")
+
+ggplot(data = filter(scenfl1_d, day >= 0, day <= 30), aes(x = day, y = infection_new_md)) +
+  geom_ribbon(aes(ymin = infection_new_ql, ymax = infection_new_qh), fill ='grey80') +
+  geom_line() +
+  geom_ribbon(data = filter(scenfl2_d, day >= 0, day <= 30), aes(ymin = infection_new_ql, ymax = infection_new_qh), fill ='red4', alpha = 0.2) +
+  geom_line(data = filter(scenfl2_d, day >= 0, day <= 30), color = "red") +
+  theme_bw() +
+  xlab("Days") + ylab("Incidence")
+
+### display contact data
